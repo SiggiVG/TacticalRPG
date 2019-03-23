@@ -1,0 +1,95 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node",
+"class": "DiceRoller",
+"language": "GDScript",
+"path": "res://util/DiceRoller.gd"
+}, {
+"base": "Node2D",
+"class": "Entity",
+"language": "GDScript",
+"path": "res://actors/Entity.gd"
+}, {
+"base": "Node2D",
+"class": "EntityHumanoid",
+"language": "GDScript",
+"path": "res://actors/EntityHumanoid.gd"
+}, {
+"base": "Node2D",
+"class": "EntityLiving",
+"language": "GDScript",
+"path": "res://actors/EntityLiving.gd"
+}, {
+"base": "Node",
+"class": "Health",
+"language": "GDScript",
+"path": "res://actors/living/Health.gd"
+}, {
+"base": "Node",
+"class": "Living",
+"language": "GDScript",
+"path": "res://actors/Living.gd"
+}, {
+"base": "Node",
+"class": "Maths",
+"language": "GDScript",
+"path": "res://util/Maths.gd"
+}, {
+"base": "Node",
+"class": "Morale",
+"language": "GDScript",
+"path": "res://actors/living/Morale.gd"
+}, {
+"base": "Node",
+"class": "Traits",
+"language": "GDScript",
+"path": "res://actors/living/Traits.gd"
+}, {
+"base": "Control",
+"class": "TurnQueue",
+"language": "GDScript",
+"path": "res://TurnQueue.gd"
+} ]
+_global_script_class_icons={
+"DiceRoller": "",
+"Entity": "",
+"EntityHumanoid": "",
+"EntityLiving": "",
+"Health": "",
+"Living": "",
+"Maths": "",
+"Morale": "",
+"Traits": "",
+"TurnQueue": ""
+}
+
+[application]
+
+config/name="Tactical RPG"
+run/main_scene="res://Main.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+res="*res://util/Resources.gd"
+dir="*res://util/Direction.gd"
+dice="*res://util/DiceRoller.gd"
+maths="*res://util/Maths.gd"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
