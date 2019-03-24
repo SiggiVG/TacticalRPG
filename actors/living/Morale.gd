@@ -38,23 +38,23 @@ func time_pass(emit_signals := false):
 
 func rest(type, include_lesser := false):
 	match type:
-		Living.REST_TYPE.EXTENDED:
+		EntityLiving.REST_TYPE.EXTENDED:
 			for i in range(7):
 				time_pass()
 			if(include_lesser): continue
 			else:
 				emit_signal("fear_changed",fear);
 				emit_signal("courage_changed",courage);
-		Living.REST_TYPE.BED: 
+		EntityLiving.REST_TYPE.BED: 
 			time_pass(!include_lesser)
 			if(include_lesser): continue
-		Living.REST_TYPE.LONG: 
+		EntityLiving.REST_TYPE.LONG: 
 			time_pass(!include_lesser)
 			if(include_lesser): continue
-		Living.REST_TYPE.SHORT: 
+		EntityLiving.REST_TYPE.SHORT: 
 			time_pass(!include_lesser)
 			if(include_lesser): continue
-		Living.REST_TYPE.BREATH: 
+		EntityLiving.REST_TYPE.BREATH: 
 			time_pass(true)
 
 #const _MOD_THRESHOLDS = [0,0,1,3,7];

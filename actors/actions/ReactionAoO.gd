@@ -1,0 +1,4 @@
+extends Node
+
+class_name ReactionAoO
+class_name AttackOfOpportunity

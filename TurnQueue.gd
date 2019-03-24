@@ -15,7 +15,7 @@ func initialize():
 	roll_initiative()
 #	active_character = get_child(0).name
 	for i in range(get_child_count()):
-		print(str(get_child(i).name," ",get_character(get_child(i).name).get_node("Living").initiative))
+		print(str(get_child(i).name," rolled an initiative of ",get_character(get_child(i).name).get_node("Living").initiative))
 
 func get_character(name : String) -> Node:
 	return get_parent().find_node(path_to_entities).get_node(name)
