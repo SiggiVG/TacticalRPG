@@ -17,12 +17,16 @@ func _unhandled_input(event):
 	if not event.pressed:
 		return
 	if event.button_index == BUTTON_LEFT:
-		var dest = get_viewport().get_mouse_position()
-		set_destination(get_viewport().get_mouse_position())
+		if show_move_range:
+			iso.highlight_area(iso.world_to_map(global_position), 0, max_move_tiles, false)
+	#		show_move_range = false
+			var dest = get_viewport().get_mouse_position()
+#			set_destination(get_viewport().get_mouse_position())
+			show_move_range = false
 
 #		print(living.move_path.size())
-		if(_movement_path.size() > 1):
-			get_tree().set_input_as_handled()
+			if(_movement_path.size() > 1):
+				get_tree().set_input_as_handled()
 	if event.button_index == BUTTON_RIGHT:
 		if(has_item(0)):
 			drop_item(0)
@@ -70,4 +74,7 @@ func drop_item(hand):
 		print(str(name,"'s Hand called Hand",hand_name(hand)," has dropped the item called ",item.name))
 		find_parent("Main").find_node("Dungeon").add_item_to_world(item, global_position)
 
-
+func _on_Main_on_tile_clicked(mouse_button, world_pos : Vector2, tile_type : String):
+	if mouse_button == BUTTON_LEFT:
+		if show_move_range and "Red" in tile_type:
+			set_destination(world_pos)

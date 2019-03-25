@@ -10,7 +10,7 @@ export var grid_neg_y := -16
 export var grid_x := 32
 export var grid_y := 16
 export var nav_cardinal := true
-export var nav_intercardinal := false
+export var nav_intercardinal := true
 
 var astar := AStar.new()
 
