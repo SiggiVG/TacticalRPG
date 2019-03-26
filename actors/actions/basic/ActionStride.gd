@@ -58,7 +58,7 @@ func _process(delta) -> void:
 			if(maximum_movement != -1):
 				movement = min(maximum_movement, entity.get_move_speed())
 			#adds 0.5 to move speed to allow for a single diagonal movement to only count as 1 move.
-			if(cost > movement+.5):
+			if(cost > movement+.5 or cost == -1):
 				_reset()
 				return
 			# is already at the destination

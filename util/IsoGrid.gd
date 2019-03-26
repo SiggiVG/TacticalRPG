@@ -64,6 +64,7 @@ func get_move_path(start : Vector2, end : Vector2) -> PoolVector2Array:
 	return move_path
 
 func compute_cost(path : PoolVector2Array) -> float:
+	if path.size() < 1: return -1.0
 	var last = world_to_map(path[0])
 	var res = 0.0
 	for i in range(1,path.size()):

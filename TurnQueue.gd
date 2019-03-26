@@ -15,7 +15,7 @@ func initialize():
 	roll_initiative()
 #	active_character = get_child(0).name
 	for i in range(get_child_count()):
-		print(str(get_child(i).name," rolled an initiative of ",get_character(get_child(i).name).get_node("Living").initiative))
+		print(str(get_child(i).name," rolled an initiative of ",get_character(get_child(i).name).initiative))
 
 func get_character(name : String) -> Node:
 	return get_parent().find_node(path_to_entities).get_node(name)
@@ -27,7 +27,7 @@ func play_turn() -> void:
 	
 func roll_initiative() -> void:
 	for battler in get_battlers():
-		battler.get_node("Living").roll_initiative()
+		battler.roll_initiative()
 	sort_battlers()
 	arrange_sprites()
 
@@ -44,9 +44,9 @@ func arrange_sprites(offsetx := offset_x, offsety := offset_y) -> void:
 	for i in get_child_count():
 		var sprite = get_child(i)
 		if(sprite is Sprite):
-			sprite.modulate.r -= i/5.0
-			sprite.modulate.g += i/5.0
-			sprite.modulate.b -= i/5.0
+#			sprite.modulate.r -= i/5.0
+#			sprite.modulate.g += i/5.0
+#			sprite.modulate.b -= i/5.0
 			sprite.position.x = (offsetx * i)
 			sprite.position.y = (offsety * i)
 	

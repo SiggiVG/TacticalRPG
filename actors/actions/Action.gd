@@ -6,7 +6,6 @@ onready var _actions_to_perform := 1
 export var traits := []
 
 func perform_action(entity, args : Array):
-	return 0
 	"""
 	Entities will have a child that contains a list of actions (and activities, reactions) 
 	that they can perform.
@@ -14,3 +13,4 @@ func perform_action(entity, args : Array):
 
 	@return the number of actions taken (in case it gets interupted)
 	"""
+	return 0

@@ -94,7 +94,7 @@ func _on_entity_selected() -> bool:
 	var sup = ._on_entity_selected()
 	#todo: move to EntityPlayer and do UI
 	#currently defaults to striding
-	var action_status = get_node("Actions/ActionStep").perform_action(self, [position, actions_left])
+	var action_status = get_node("Actions/ActionStride").perform_action(self, [position, actions_left])
 	actions_left -= action_status
 #	if(not action_status is int and not action_status == null):
 #		action_status.resume()
