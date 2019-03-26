@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://FogOfWar.png" type="Texture" id=1]
+
+[node name="TileSetFogOfWar" type="Node"]
+
+[node name="UnseenDark" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+vframes = 2
+hframes = 2
+
+[node name="SeenDarkFog" type="Sprite" parent="."]
+position = Vector2( 128, 0 )
+texture = ExtResource( 1 )
+vframes = 2
+hframes = 2
+frame = 1
+
+[node name="SeenDim" type="Sprite" parent="."]
+position = Vector2( 256, 0 )
+texture = ExtResource( 1 )
+vframes = 2
+hframes = 2
+frame = 2
+
+[node name="SeenLit" type="Sprite" parent="."]
+position = Vector2( 384, 0 )
+texture = ExtResource( 1 )
+vframes = 2
+hframes = 2
+frame = 3
+

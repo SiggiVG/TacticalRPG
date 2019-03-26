@@ -11,9 +11,10 @@ func _ready() -> void:
 	generate_equipment_slots()
 
 func generate_equipment_slots() -> void:
+	#is bodytime has parts
 	if body_type.get_child_count() > 0:
 		for part in body_type.get_children():
+			#if part doesnt already exist, generate it
 			if get_node(part.name) == null:
-				var node = Node.new()
-				node.name = part.name
+				var node : Node = part.duplicate()
 				self.add_child(node)

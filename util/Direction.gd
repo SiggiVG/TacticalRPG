@@ -44,17 +44,30 @@ func is_intercardinal(dir: Vector2) -> bool:
 		NORTH_EAST,SOUTH_EAST,SOUTH_WEST,NORTH_WEST: return true
 	return false
 
-func ordinal(dir : Vector2) -> float:
+func to_string(dir : Vector2) -> String:
 	match dir:
-		NORTH:		return 1.0
-		EAST:		return 2.0
-		SOUTH:		return 3.0
-		WEST:		return 4.0
-		NORTH_EAST:	return 1.5
-		SOUTH_EAST:	return 2.5
-		SOUTH_WEST:	return 3.5
-		NORTH_WEST:	return 4.5
-	return 0.0
+		NORTH:		return "north"
+		EAST:		return "east"
+		SOUTH:		return "south"
+		WEST:		return "west"
+		NORTH_EAST:	return "north_east"
+		SOUTH_EAST:	return "south_east"
+		SOUTH_WEST:	return "south_west"
+		NORTH_WEST:	return "north_west"
+		CENTER:		return "origin"
+	return "null_direction"
+
+#func ordinal(dir : Vector2) -> float:
+#	match dir:
+#		NORTH:		return 1.0
+#		EAST:		return 2.0
+#		SOUTH:		return 3.0
+#		WEST:		return 4.0
+#		NORTH_EAST:	return 1.5
+#		SOUTH_EAST:	return 2.5
+#		SOUTH_WEST:	return 3.5
+#		NORTH_WEST:	return 4.5
+#	return 0.0
 		
 func axis(dir : Vector2) -> String:
 	match dir:

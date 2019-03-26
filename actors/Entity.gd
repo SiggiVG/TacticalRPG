@@ -5,8 +5,15 @@ class_name Entity
 onready var sprite := $Sprite
 
 var has_used_reaction := false
+var cur_action : Action
 
 signal on_enter_cell
+
+func _begin_turn() -> void:
+	pass
+
+func _can_stride() -> bool:
+	return false
 
 func _on_initiative_20() -> bool:
 	"""
@@ -14,3 +21,13 @@ func _on_initiative_20() -> bool:
 	this is used by nonliving entities (such as traps) to perform their actions
 	"""
 	return true
+
+func _on_entity_selected() -> bool:
+	return false
+
+func _on_EntityArea_entity_clicked(button_index):
+	if not button_index == BUTTON_LEFT:
+		return
+	var status = _on_entity_selected()
+	if status:
+		get_tree().set_input_as_handled()

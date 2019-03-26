@@ -1,12 +1,15 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://actors/EntityHumanoid.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Dungeon.gd" type="Script" id=3]
 [ext_resource path="res://TileSetIso.tres" type="TileSet" id=4]
 [ext_resource path="res://TileMapIso.gd" type="Script" id=5]
-[ext_resource path="res://Die_48x48.png" type="Texture" id=6]
-[ext_resource path="res://cat_numbers.png" type="Texture" id=7]
+[ext_resource path="res://FogOfWar.tres" type="TileSet" id=6]
+[ext_resource path="res://FogOfWar.gd" type="Script" id=7]
+[ext_resource path="res://Die_48x48.png" type="Texture" id=8]
+[ext_resource path="res://cat_numbers.png" type="Texture" id=9]
+[ext_resource path="res://TurnQueue.tscn" type="PackedScene" id=10]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
@@ -23,9 +26,6 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Items" type="Node2D" parent="Dungeon"]
-z_index = 1
-
 [node name="TileMap" type="TileMap" parent="Dungeon"]
 z_index = -2
 mode = 1
@@ -39,25 +39,40 @@ script = ExtResource( 5 )
 [node name="FogOfWar" type="TileMap" parent="Dungeon"]
 z_index = 1
 mode = 1
+tile_set = ExtResource( 6 )
 cell_size = Vector2( 128, 64 )
+format = 1
+script = ExtResource( 7 )
+
+[node name="HighlightMap" type="TileMap" parent="Dungeon"]
+z_index = -1
+mode = 1
+tile_set = ExtResource( 4 )
+cell_size = Vector2( 128, 64 )
+format = 1
+
+[node name="Items" type="Node2D" parent="Dungeon"]
+z_index = 1
 
 [node name="Die" type="Sprite" parent="."]
 position = Vector2( 1216, 656 )
 scale = Vector2( 2, 2 )
-texture = ExtResource( 6 )
+texture = ExtResource( 8 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
 }
 
 [node name="Number" type="Sprite" parent="Die"]
-texture = ExtResource( 7 )
+texture = ExtResource( 9 )
 vframes = 2
 hframes = 10
 frame = 19
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="TurnQueue" parent="." instance=ExtResource( 10 )]
 
 [connection signal="on_tile_clicked" from="." to="Entities/Player" method="_on_Main_on_tile_clicked"]
 [connection signal="on_tile_clicked" from="Dungeon/TileMap" to="." method="_on_TileMap_on_tile_clicked"]

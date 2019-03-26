@@ -16,3 +16,5 @@ __meta__ = {
 "_edit_lock_": true
 }
 
+[node name="Actions" type="Node" parent="."]
+
