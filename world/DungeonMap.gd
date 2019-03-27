@@ -206,7 +206,7 @@ func _vec_to_index(vec : Vector2) -> int:
 	"""
 	Converts a vector (in map coordinates) into the index used by the A* pathfinder
 	"""
-	return int((vec.y * 50) + vec.x)
+	return int((vec.y * 43) + vec.x)
 	
 func set_tile(map_type, point : Vector2, tile_index : int, pos_is_in_world_coords := false) -> void:
 	"""
@@ -246,7 +246,8 @@ func get_tile(map_type, pos : Vector2, pos_is_in_world_coords := false) -> int:
 func within_bounds(pos : Vector2) -> bool:
 	if pos.x < 0 or pos.y < 0:
 		return false
-		
+	if pos.x > 43 or pos.y > 43:
+		return false
 	"""
 	temprary condition
 	"""
