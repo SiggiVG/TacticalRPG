@@ -16,14 +16,14 @@ var astar := AStar.new()
 
 onready var offset_to_center = Vector2(0, tile_map.cell_size.y / 2)
 
-func _ready():
+#func _ready():
 #	for i in range(grid_neg_x,grid_x):
 #		for j in range(grid_neg_y,grid_y):
-#			var cell = rand_range(-1,5)
+#			var cell = rand_range(-1,3)
 #			if(cell > 0):
 #				tile_map.set_cell(i,j,0)
-	build_paths()
-	pass
+#	build_paths()
+#	pass
 
 func add_item_to_world(item, pos : Vector2) -> void:
 	if(item == null):

@@ -91,12 +91,19 @@ func drop_item(hand):
 #		show_move_range = false
 
 func _on_entity_selected() -> bool:
-	var sup = ._on_entity_selected()
+	
+#	var sup = ._on_entity_selected()
+
+#	var d_map = (find_parent("Main").find_node("DungeonMap") as DungeonMap)#.set_tile(DungeonMap.MAP_TYPE.FLOOR, global_position, 0, true)
+#	if d_map.zoom == DungeonMap.ZOOM.OUT:
+#		d_map.zoom_in()
+#	else:
+#		d_map.zoom_out()
 	#todo: move to EntityPlayer and do UI
 	#currently defaults to striding
 	var action_status = get_node("Actions/ActionStride").perform_action(self, [position, actions_left])
-	actions_left -= action_status
+#	actions_left -= action_status
 #	if(not action_status is int and not action_status == null):
 #		action_status.resume()
 #	actions_left -= action_status
-	return sup or bool(action_status)
+	return true #sup or bool(action_status)
