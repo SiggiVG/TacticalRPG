@@ -7,9 +7,9 @@ var traits : Traits
 signal health_changed(amount)
 signal max_health_changed(amount)
 
-const BASE_HEALTH = 30
+const BASE_HEALTH = 15
 var max_health = BASE_HEALTH
-var current_health = max_health
+var current_health = max_health setget set_current_health, get_current_health
 
 func _ready():
 	traits = get_node("../Traits")
@@ -17,7 +17,15 @@ func _ready():
 		max_health = BASE_HEALTH + traits.get_trait_val(Traits.TRAIT.STR) + traits.get_trait_val(Traits.TRAIT.CON) + traits.get_trait_val(Traits.TRAIT.BUL)
 	emit_signal("max_health_changed", max_health)
 	emit_signal("health_changed",current_health)
-	
+
+func set_current_health(amount : int) -> int:
+	if amount < 0:
+		amount = 0
+	current_health = amount
+	return amount
+
+func get_current_health() -> int:
+	return current_health
 
 func take_damage(amount : int) -> int:
 	if(amount >= current_health):

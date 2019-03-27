@@ -7,7 +7,7 @@ export var offset_y := 0
 
 export var path_to_entities := "Entities"
 
-var active_character : String
+var active_character : EntityLiving setget set_active_character, get_active_character
 
 func initialize():
 #	print(str(name," ",position))
@@ -17,19 +17,31 @@ func initialize():
 	for i in range(get_child_count()):
 		print(str(get_child(i).name," rolled an initiative of ",get_character(get_child(i).name).initiative))
 
+func set_active_character(character) -> void:
+	if character is String:
+		character = get_character(character)
+	active_character = character
+	
+func get_active_character(as_string := false):
+	if as_string:
+		return active_character.name
+	return active_character
+
 func get_character(name : String) -> Node:
 	return get_parent().find_node(path_to_entities).get_node(name)
 
-func play_turn() -> void:
-	yield(get_character(active_character).play_turn(), "completed")
-	var new_index : int = (get_character(active_character).get_index()+1) % get_child_count()
-	active_character = get_child(new_index).name
+func set_sprite_has_taken_turn(character) -> void:
+	if character is String:
+		character = get_character(character)
 	
+
 func roll_initiative() -> void:
+	print ("ROLL INITIATIVE")
 	for battler in get_battlers():
 		battler.roll_initiative()
 	sort_battlers()
 	arrange_sprites()
+	set_active_character(get_child(0).name)
 
 func sort_battlers() -> void:
 	var battlers = get_battlers()
@@ -53,7 +65,7 @@ func arrange_sprites(offsetx := offset_x, offsety := offset_y) -> void:
 	
 func sort_by_initiative(a : Node, b : Node) -> bool:
 	#todo: check is ==, and if so, highest dex goes first or player goes first
-	return a.get_node("Living").initiative > b.get_node("Living").initiative
+	return a.initiative > b.initiative
 
 func generate_sprites() -> void:
 	#adds new sprites

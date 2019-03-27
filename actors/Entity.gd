@@ -9,7 +9,11 @@ var cur_action : Action
 
 signal on_enter_cell
 
+func _ready():
+	set_process(false)
+
 func _begin_turn() -> void:
+	
 	pass
 
 func _can_stride() -> bool:
@@ -22,12 +26,12 @@ func _on_initiative_20() -> bool:
 	"""
 	return true
 
-func _on_entity_selected() -> bool:
-	return false
+func _on_entity_selected():
+	return
 
 func _on_EntityArea_entity_clicked(button_index):
 	if not button_index == BUTTON_LEFT:
 		return
-	var status = _on_entity_selected()
-	if status:
-		get_tree().set_input_as_handled()
+	_on_entity_selected()
+	
+	get_tree().set_input_as_handled()

@@ -2,18 +2,8 @@ extends Action
 
 class_name ActionStride
 
-enum STRIDE_STATUS {
-	BEGIN,
-	INPUT,
-	CHECK_VALID
-	MOVE,
-	INTERRUPTED,
-	FINISHED
-}
-
 onready var entity := (get_parent().get_parent() as EntityLiving)
 
-var status = null
 var last_pos
 var destination
 var move_path
@@ -23,71 +13,77 @@ var maximum_movement := -1
 signal tile_entered(entity, tile_pos, action)
 signal tile_exited(entity, tile_pos, action)
 
-onready var d_map := find_parent("Main").find_node("DungeonMap") as DungeonMap
+#onready var d_map := find_parent("Main").find_node("DungeonMap") as DungeonMap
 
 func _ready() -> void:
 	traits.append("move")
 	set_process(false)
 
-func perform_action(entity, args : Array) -> int:
-	status = STRIDE_STATUS.BEGIN
+func perform_action(entity, args : Dictionary) -> int:
+	action_status = Action.STATUS.BEGIN
 	set_process(true)
-	return args[1]
+	last_pos = args.get("position")
+	yield()
+	print(action_status)
+	if action_status == Action.STATUS.FINISHED:
+		return -1
+	return 0
 
 func _process(delta) -> void:
-	match status:
-		STRIDE_STATUS.BEGIN: #checks if it's able to do the action
+	match action_status:
+		Action.STATUS.BEGIN: #checks if it's able to do the action
 			if not entity is EntityLiving:
 				return
 			if !entity._can_stride():
 				return
 			var movement = entity.get_move_speed()
+#			print(str("move speed: ",movement))
 			if(maximum_movement != -1):
-				movement = min(maximum_movement, entity.get_move_speed())
+				movement = min(maximum_movement, movement)
 			if(movement > 0):
 				#adds 1.0 as it starts out expanded by 1
 				"""
 				TODO move fix to the iso method
 				"""
-#				print(movement)
+#				print(str("movement: ",movement))
 #				var d_map = find_parent("Main").find_node("DungeonMap") as DungeonMap
 				d_map.highlight_area(entity.global_position, 1, true, movement+1.0)
-				print("stride began")
-				status = STRIDE_STATUS.INPUT
-		STRIDE_STATUS.CHECK_VALID:
+#				print("stride began")
+				action_status = Action.STATUS.INPUT
+		Action.STATUS.CHECK_VALID:
 			
 			var move_path_calc = d_map.get_move_path(entity.global_position, destination, true)
 			var cost = d_map.compute_path_cost(move_path_calc)
 #			print(cost)
 			var movement = entity.get_move_speed()
+#			print(str("move speed: ",entity.get_move_speed()))
 			if(maximum_movement != -1):
 				movement = min(maximum_movement, entity.get_move_speed())
 			#adds 0.5 to move speed to allow for a single diagonal movement to only count as 1 move.
-			if cost == -1:
-				print("move path is empty")
+#			print(str("max movement: ",maximum_movement))
+			if cost == -1 or cost > movement+.5 or move_path_calc.size() <= 1:
 				_reset()
 				return
-			if cost > movement+.5:
-				print("position is out of range")
-				_reset()
-				return
-			# is already at the destination
-			if move_path_calc.size() <= 1:
-				print ("move_path <= 1")
-				_reset()
-				return
+#			if cost > movement+.5:
+##				print("position is out of range")
+#				_reset()
+#				return
+#			# is already at the destination
+#			if move_path_calc.size() <= 1:
+##				print ("move_path <= 1")
+#				_reset()
+#				return
 			move_path = move_path_calc
 			last_pos = entity.position
-			print("stride valid")
-			status = STRIDE_STATUS.MOVE
-		STRIDE_STATUS.MOVE:
+#			print("stride valid")
+			action_status = Action.STATUS.DO_ACTION
+		Action.STATUS.DO_ACTION:
 			_do_move(max(entity.get_move_speed(),3))
-		STRIDE_STATUS.INTERRUPTED:
-			print("stride interrupted")
-			status = STRIDE_STATUS.FINISHED
-			continue
-		STRIDE_STATUS.FINISHED:
-			print("stride finished")
+		Action.STATUS.INTERRUPTED:
+#			print("stride interrupted")
+			pass
+		Action.STATUS.FINISHED:
+#			print("stride finished")
 			_reset()
 		_: 
 			return
@@ -95,25 +91,24 @@ func _process(delta) -> void:
 func _reset() -> void:
 	get_parent().get_parent().cur_action = null
 	last_pos = null
-	status = null
 	destination = null
 	move_path = null
-	status = STRIDE_STATUS.BEGIN
+	action_status = Action.STATUS.INTERRUPTED
 	set_process(false)
 
 func _input(event):
-	if(status == STRIDE_STATUS.INPUT):
+	if(action_status == Action.STATUS.INPUT):
 		if event is InputEventMouseButton:
 			if event.button_index == BUTTON_LEFT and event.is_pressed():
 				destination = get_viewport().get_mouse_position()
 				#hide selection area
 				d_map.clear_highlight()
-				print("stride checking valid")
-				status = STRIDE_STATUS.CHECK_VALID
+#				print("stride checking valid")
+				action_status = Action.STATUS.CHECK_VALID
 
 func _do_move(dist : float) -> void:
 	if !move_path:
-		status = STRIDE_STATUS.FINISHED
+		action_status = Action.STATUS.FINISHED
 		return
 	# if leaving a tile
 	#the tile_exited signal will be passed to other entities to determine if they can take an Attack of Opportunity
@@ -128,7 +123,7 @@ func _do_move(dist : float) -> void:
 		return
 	# if it is the last node in the move path it will avoid overunning it
 	elif move_path.size() == 1 and dist > dist_to_next:
-		status = STRIDE_STATUS.FINISHED
+		action_status = Action.STATUS.FINISHED
 	emit_signal("tile_entered", entity, d_map.world_to_map(entity.position), self)
 	entity.position = move_path[0]
 	last_pos = entity.position

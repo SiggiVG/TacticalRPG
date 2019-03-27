@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://world/DungeonMap.tscn" type="PackedScene" id=2]
-[ext_resource path="res://actors/EntityHumanoid.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Die_48x48.png" type="Texture" id=4]
-[ext_resource path="res://cat_numbers.png" type="Texture" id=5]
-[ext_resource path="res://TurnQueue.tscn" type="PackedScene" id=6]
+[ext_resource path="res://actors/EntityList.gd" type="Script" id=3]
+[ext_resource path="res://actors/EntityHumanoid.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Die_48x48.png" type="Texture" id=5]
+[ext_resource path="res://cat_numbers.png" type="Texture" id=6]
+[ext_resource path="res://TurnQueue.tscn" type="PackedScene" id=7]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
@@ -14,22 +15,28 @@ script = ExtResource( 1 )
 editor/display_folded = true
 
 [node name="Entities" type="Node" parent="."]
+script = ExtResource( 3 )
 
-[node name="Player" parent="Entities" instance=ExtResource( 3 )]
+[node name="Player" parent="Entities" instance=ExtResource( 4 )]
 position = Vector2( 640, 352 )
+is_player_controlled = true
+is_active_character = true
+
+[node name="EntityHumanoid" parent="Entities" instance=ExtResource( 4 )]
+position = Vector2( 384, 320 )
 
 [node name="Die" type="Sprite" parent="."]
 visible = false
 position = Vector2( 1216, 656 )
 scale = Vector2( 2, 2 )
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true,
 "_edit_lock_": true
 }
 
 [node name="Number" type="Sprite" parent="Die"]
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 vframes = 2
 hframes = 10
 frame = 19
@@ -37,7 +44,7 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="TurnQueue" parent="." instance=ExtResource( 6 )]
+[node name="TurnQueue" parent="." instance=ExtResource( 7 )]
 visible = false
 
 [connection signal="on_tile_clicked" from="." to="Entities/Player" method="_on_Main_on_tile_clicked"]

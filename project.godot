@@ -25,6 +25,11 @@ _global_script_classes=[ {
 "path": "res://actors/actions/basic/ActionStride.gd"
 }, {
 "base": "Action",
+"class": "ActionStrike",
+"language": "GDScript",
+"path": "res://actors/actions/basic/ActionStrike.gd"
+}, {
+"base": "Action",
 "class": "Activity",
 "language": "GDScript",
 "path": "res://actors/actions/Activity.gd"
@@ -63,6 +68,11 @@ _global_script_classes=[ {
 "class": "EntityHumanoid",
 "language": "GDScript",
 "path": "res://actors/EntityHumanoid.gd"
+}, {
+"base": "Node",
+"class": "EntityList",
+"language": "GDScript",
+"path": "res://actors/EntityList.gd"
 }, {
 "base": "Node2D",
 "class": "EntityLiving",
@@ -113,6 +123,7 @@ _global_script_class_icons={
 "Action": "",
 "ActionStep": "",
 "ActionStride": "",
+"ActionStrike": "",
 "Activity": "",
 "AttackOfOpportunity": "",
 "DiceRoller": "",
@@ -121,6 +132,7 @@ _global_script_class_icons={
 "DungeonZoom": "",
 "Entity": "",
 "EntityHumanoid": "",
+"EntityList": "",
 "EntityLiving": "",
 "Health": "",
 "Helper": "",

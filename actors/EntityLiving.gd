@@ -27,11 +27,11 @@ enum REST_TYPE {
 	EXTENDED #one week, used to learn new skills & level up
 }
 
-export (int) var max_move_tiles = 5
-var show_move_range := false
+export var max_move_tiles := 5
+export var reach := 1
 
-var actions_left := 0
-var reactions_left := 0
+var actions_remaining := 3
+var reactions_remaining := 1
 
 var initiative : int
 
@@ -42,13 +42,14 @@ var _movement_path : PoolVector2Array
 var _move_to_destination := false
 
 func _ready():
+	._ready()
 #	$EntityArea.connect("mouse_exited", self, "_on_EntityArea_mouse_exited")
 	$EntityArea.connect("entity_clicked", self, "_on_EntityArea_entity_clicked")
 	pass
 
 func _begin_turn() -> void:
-	actions_left = 3
-	reactions_left = 1
+	actions_remaining = 3
+	reactions_remaining = 1
 
 func roll_initiative() -> int:
 	initiative = dice.roll20(traits.get_trait_val("dex") - traits.get_trait_val("bul"))
@@ -59,6 +60,12 @@ func get_move_speed() -> int:
 	@returns the amount of tiles that the entity is currently able to move in a single stride action
 	"""
 	return int(max(0,max_move_tiles + acceleration - slowness))
+
+func take_damage(type := "generic", amount := 1) -> int:
+	var dam =  health.take_damage(amount)
+	if(health.current_health <= 0):
+		print (str(name, " has been slain!"))
+	return dam
 
 func _process(delta) -> void:
 	pass

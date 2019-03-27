@@ -4,42 +4,12 @@ class_name EntityHumanoid
 
 onready var humanoid_body := $Living/Body/HumanoidBody
 
-var is_active_character := true
+export var is_player_controlled := false
+export var is_active_character := false
+onready var actions := $Actions
 
-#func _unhandled_input(event):
-#	if not is_active_character:
-#		return
-#	if not event is InputEventMouseButton:
-#		return
-##	var mp = get_viewport().get_mouse_position()
-##	if(mp.x > position.x - 20 and mp.y > position.y -20 and mp.x < position.x+20 and mp.y < position.y+20):
-##		print("fart")
-#	if not event.pressed:
-#		return
-#	if event.button_index == BUTTON_LEFT:
-#		find_node("ActionStride").perform_action(global_position, max_move_tiles)
-		#TODO: move to stride action
-#		if show_move_range:
-##			iso.clear_highlight()
-##			iso.highlight_area(iso.world_to_map(global_position), 0, max_move_tiles, false)
-#	#		show_move_range = false
-##			var dest = get_viewport().get_mouse_position()
-##			set_destination(get_viewport().get_mouse_position())
-#			show_move_range = false
-#		else:
-##			iso.highlight_area(iso.world_to_map(global_position), 1, max_move_tiles, false)
-#			show_move_range = true
-
-#		print(living.move_path.size())
-#			if(_movement_path.size() > 1):
-#				get_tree().set_input_as_handled()
-#	if event.button_index == BUTTON_RIGHT:
-#		if(has_item(0)):
-#			drop_item(0)
-#			get_tree().set_input_as_handled()
-#		elif(has_item(1)):
-#			drop_item(1)
-#			get_tree().set_input_as_handled()
+func _ready() -> void:
+	._ready()
 
 func get_hand(hand):
 	return get_node(str("Living/Inventory/Equipment/","Hand",hand_name(hand)))
@@ -90,20 +60,30 @@ func drop_item(hand):
 #		iso.clear_highlight()
 #		show_move_range = false
 
-func _on_entity_selected() -> bool:
-	
-#	var sup = ._on_entity_selected()
+var action_status
 
-#	var d_map = (find_parent("Main").find_node("DungeonMap") as DungeonMap)#.set_tile(DungeonMap.MAP_TYPE.FLOOR, global_position, 0, true)
-#	if d_map.zoom == DungeonMap.ZOOM.OUT:
-#		d_map.zoom_in()
-#	else:
-#		d_map.zoom_out()
-	#todo: move to EntityPlayer and do UI
-	#currently defaults to striding
-	var action_status = get_node("Actions/ActionStride").perform_action(self, [position, actions_left])
-#	actions_left -= action_status
-#	if(not action_status is int and not action_status == null):
-#		action_status.resume()
-#	actions_left -= action_status
-	return true #sup or bool(action_status)
+func _process(delta) -> void:
+	if is_active_character:
+#		print (get_actions().get_child(0))
+#		print (actions.get_child(0).action_status)
+		if !cur_action:
+			set_process(false)
+			action_status = null
+			return
+		if cur_action.action_status == Action.STATUS.FINISHED or cur_action.action_status == Action.STATUS.INTERRUPTED:
+			print (cur_action.name)
+			actions_remaining += action_status.resume()
+			action_status = null
+			set_process(false)
+	else:
+		set_process(false)
+
+func _on_entity_selected():
+	if is_active_character:
+		if actions_remaining > 0:
+			cur_action = actions.get_node("ActionStrike")
+			action_status = cur_action.perform_action(self, {"position" : position, "actions_remaining" : actions_remaining})
+			set_process(true)
+		else:
+			is_active_character = false
+			set_process(false)
