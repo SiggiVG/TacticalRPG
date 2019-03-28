@@ -8,66 +8,82 @@ enum MAP_TYPE {
 	FOG
 }
 
-#onready var zoomed_map = $ZoomIn
 onready var tile_map = $Map
 
-onready var zoomed_tile_set = preload("res://TileSetIsoFog.tres")
-onready var full_tile_set = preload("res://TileSetIso.tres")
+onready var zoomed_tile_set = preload("res://world/TileSetIso.tres")
+#onready var full_tile_set = preload("res://new_tileset.tres")
 
-#var map_bounds : Vector2 = Vector2(32,32)
 var astar := AStar.new()
+"""
+TODO: have character movement be independent of zoom
+"""
 
-enum ZOOM { IN, OUT }
-var zoom = ZOOM.OUT
 
-func zoom_in() -> void:
-	set_zoom(ZOOM.IN)
-
-func zoom_out() -> void:
-	set_zoom(ZOOM.OUT)
-		
-func set_zoom(zoom_val):
-	"""
-	returns the value zoom is set to
-	"""
-	match zoom_val:
-		ZOOM.IN:
-			if zoom == ZOOM.OUT:
-				tile_map.cell_size = consts.ZOOM_CELL_SIZE
-				tile_map.set_tile_set(zoomed_tile_set)
-				zoom = ZOOM.IN
-		ZOOM.OUT:
-			if zoom == ZOOM.IN:
-				tile_map.cell_size = consts.FULL_CELL_SIZE
-				tile_map.set_tile_set(full_tile_set)
-				zoom = ZOOM.OUT
-	return zoom
-		
-		
+"""
+Move the following to its own handler
+"""
+#enum ZOOM { IN, OUT }
+#var zoom = ZOOM.OUT
+#
+#func zoom_in() -> void:
+#	set_zoom(ZOOM.IN)
+#
+#func zoom_out() -> void:
+#	set_zoom(ZOOM.OUT)
+#
+#func set_zoom(zoom_val):
+#	"""
+#	returns the value zoom is set to
+#	"""
+#	match zoom_val:
+#		ZOOM.IN:
+#			if zoom == ZOOM.OUT:
+#				tile_map.cell_size = consts.ZOOM_CELL_SIZE
+#				tile_map.set_tile_set(zoomed_tile_set, null, null, null, zoomed_tile_set)
+#				for each in find_parent("World").find_node("Entities").get_children():
+#					each.scale = Vector2(1,1)
+#				zoom = ZOOM.IN
+#		ZOOM.OUT:
+#			if zoom == ZOOM.IN:
+#				tile_map.cell_size = consts.FULL_CELL_SIZE
+#				tile_map.set_tile_set(full_tile_set, null, null, null, full_tile_set)
+#				for each in find_parent("World").find_node("Entities").get_children():
+#					each.scale = Vector2(.5,.5)
+#				zoom = ZOOM.OUT
+#	return zoom
 
 func _ready() -> void:
-#	zoomed_map._set_up_maps(consts.ZOOM_CELL_SIZE)
-	zoom = ZOOM.OUT
-#	zoomed_map.hide()
-	tile_map._set_up_maps(consts.ZOOM_CELL_SIZE if zoom == ZOOM.IN else consts.FULL_CELL_SIZE)
-#	tile_map.show()
+	tile_map.cell_size = consts.CELL_SIZE
+	tile_map.set_tile_set(zoomed_tile_set, null, null, null, zoomed_tile_set)
+	tile_map._set_up_maps(consts.CELL_SIZE)
 	_on_map_loaded()
+	
+#func _input(event : InputEvent) -> void:
+#	if event is InputEventMouseButton:
+#			if event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+#				zoom_in()
+#			elif event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+#				zoom_out()
+"""
+"""
 
-func load_map():#map_max_bounds : Vector2) -> void:
+
+
+
+func load_map():
 	"""
 	Currenly only sets the map bounds (-x/2 <= X < x/2, -y/2 <= Y < y/2)
 		as there is not yet any map loading functionality
 	"""
-#	map_bounds = map_max_bounds
 	
 #	set_tile(MAP_TYPE.FLOOR, Vector2(0,0), 0, false)
 #	set_tile(MAP_TYPE.FLOOR, Vector2(15,15), 0, false)
 #	print (tile_map.get_children())
-	for i in range (0,43):
-		for j in range (0,43):
-#			print(i,":",j)
-			if within_bounds(Vector2(i,j)):
-				set_tile(MAP_TYPE.FLOOR, Vector2(i,j), 5, false)
+#	for i in range (0,43):
+#		for j in range (0,43):
+##			print(i,":",j)
+#			if within_bounds(Vector2(i,j)):
+#				set_tile(MAP_TYPE.FLOOR, Vector2(i,j), 0, false)
 	
 
 func _on_map_loaded() -> bool:
@@ -83,7 +99,6 @@ func _on_map_loaded() -> bool:
 	return true
 	
 func _build_paths(floors : TileMap, obstacles : TileMap) -> void:
-#	print (str( floors,":",obstacles))
 	astar.clear()
 	"""
 	called when a tilemap has been loaded in, filling A8's graph with navigable points and connecting them
@@ -91,36 +106,29 @@ func _build_paths(floors : TileMap, obstacles : TileMap) -> void:
 	"""
 	#fill astar with navigable points
 	for vec in floors.get_used_cells():
-#		print(vec)
 		if(is_tile_traversable(vec)): 
 			astar.add_point(_vec_to_index(vec),Vector3(vec.x, vec.y,0))
-				
-	#connect points
+	
+	#connect points - passes in true for bidirectional to eliminate redundancy, as the other tile will connect it anyways
 	for vec in floors.get_used_cells():
 		if(consts.PATH_CARDINAL):
-#			print (vec+dir.NORTH)
 			if(is_tile_traversable(vec+dir.NORTH)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.NORTH))
-#				print("north")
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.NORTH), true)
 			if(is_tile_traversable(vec+dir.EAST)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.EAST))
-#				print("east")
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.EAST), true)
 			if(is_tile_traversable(vec+dir.SOUTH)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.SOUTH))
-#				print("south")
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.SOUTH), true)
 			if(is_tile_traversable(vec+dir.WEST)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.WEST))
-#				print("west")
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.WEST), true)
 		if(consts.PATH_INTERCARDINAL):
-			if(is_tile_traversable(vec+dir.NORTH_EAST)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.NORTH_EAST))
-			if(is_tile_traversable(vec+dir.SOUTH_EAST)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.SOUTH_EAST))
-			if(is_tile_traversable(vec+dir.SOUTH_WEST)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.SOUTH_WEST))
-			if(is_tile_traversable(vec+dir.NORTH_WEST)):
-				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.NORTH_WEST))
-#	print(astar.get_points().size())
+			if is_tile_traversable(vec+dir.NORTH_EAST) and can_move_to_adjacent(vec, vec+dir.NORTH_EAST):
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.NORTH_EAST), true)
+			if is_tile_traversable(vec+dir.SOUTH_EAST) and can_move_to_adjacent(vec, vec+dir.SOUTH_EAST):
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.SOUTH_EAST), true)
+			if is_tile_traversable(vec+dir.SOUTH_WEST) and can_move_to_adjacent(vec, vec+dir.SOUTH_WEST):
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.SOUTH_WEST), true)
+			if is_tile_traversable(vec+dir.NORTH_WEST) and can_move_to_adjacent(vec, vec+dir.NORTH_WEST):
+				astar.connect_points(_vec_to_index(vec), _vec_to_index(vec+dir.NORTH_WEST), true)
 
 func is_tile_traversable(point : Vector2, point_is_in_world_coords := false) -> bool:
 	"""
@@ -130,26 +138,39 @@ func is_tile_traversable(point : Vector2, point_is_in_world_coords := false) -> 
 	if point_is_in_world_coords:
 		point = world_to_map(point)
 	#test for out of bounds
-#	if not within_bounds(point):
-##		print("hope")
-#		return false
 	return get_tile(MAP_TYPE.FLOOR, point) != TileMap.INVALID_CELL and get_tile(MAP_TYPE.WALL, point) == TileMap.INVALID_CELL
+
+func can_move_to_adjacent(start : Vector2, end : Vector2, is_in_world_coords := false, flying := false) -> bool:
+	if is_in_world_coords:
+		start = world_to_map(start)
+		end = world_to_map(end)
+	if dir.is_cardinal(end - start):
+		return true
+	if dir.is_intercardinal(end - start):
+		if flying:
+			return true
+		match end - start:
+			dir.NORTH_EAST:
+				return is_tile_traversable(start + dir.EAST) and is_tile_traversable(start + dir.NORTH)
+			dir.SOUTH_EAST:
+				return is_tile_traversable(start + dir.EAST) and is_tile_traversable(start + dir.SOUTH)
+			dir.SOUTH_WEST:
+				return is_tile_traversable(start + dir.WEST) and is_tile_traversable(start + dir.SOUTH)
+			dir.NORTH_WEST:
+				return is_tile_traversable(start + dir.WEST) and is_tile_traversable(start + dir.NORTH)
+	return false
 
 func world_to_map(point : Vector2) -> Vector2:
 #	match zoom_level:
 #		ZOOM.IN:
 #			return zoomed_map.world_to_map(point)
 #		ZOOM.OUT:
-	return tile_map.world_to_map(point - position)
+	return tile_map.world_to_map(point - global_position) #+ Vector2(0,(consts.FULL_CELL_SIZE.y / 2) if zoom == ZOOM.OUT else (consts.ZOOM_CELL_SIZE.y / 2)))
 #		_: return Vector2()
 	
 func map_to_world(point : Vector2) -> Vector2:
-#	match zoom_level:
-#		ZOOM.IN:
-#			return zoomed_map.map_to_world(point)
-#		ZOOM.OUT:
-	return tile_map.map_to_world(point) + position
-#		_: return Vector2()
+	#offsets by an amount such that entities are centered on the tile
+	return tile_map.map_to_world(point) + global_position  + Vector2(0,consts.CELL_SIZE.y / 2)
 
 func get_move_path(start : Vector2, end : Vector2, pos_is_in_world_coords := false) -> PoolVector2Array:
 	"""
@@ -162,7 +183,7 @@ func get_move_path(start : Vector2, end : Vector2, pos_is_in_world_coords := fal
 		end = world_to_map(end)
 		
 	var vec3_path = _get_point_path(start,end, false)
-	var move_path = helper.array_vec3_to_vec2(vec3_path, true, self)
+	var move_path = helper.array_vec3_to_vec2(vec3_path, true, self)#, Vector2(32,0))
 	
 	return move_path
 
@@ -177,10 +198,8 @@ func _get_point_path(start : Vector2, end : Vector2, pos_is_in_world_coords := f
 	if pos_is_in_world_coords:
 		start = world_to_map(start)
 		end = world_to_map(end)
-#	print(astar.get_points())
-#	print(str(vec_to_id(start),":", vec_to_id(end)))
+
 	var move_path = astar.get_point_path(_vec_to_index(start), _vec_to_index(end))
-#	print(move_path)
 	return move_path
 
 func compute_path_cost(path : PoolVector2Array) -> float:
@@ -188,7 +207,6 @@ func compute_path_cost(path : PoolVector2Array) -> float:
 	var last = world_to_map(path[0])
 	var res = 0.0
 	for i in range(1,path.size()):
-#		print((world_to_map(path[i])-last))
 		if dir.is_cardinal(world_to_map(path[i])-last):
 			res += consts.CARDINAL_COST
 		elif dir.is_intercardinal(world_to_map(path[i])-last):
@@ -267,25 +285,30 @@ func within_bounds(pos : Vector2) -> bool:
 func clear_highlight() -> void:
 	tile_map.clear(MAP_TYPE.HIGHLIGHT)
 
-func highlight_area(pos : Vector2, tile_index : int, is_in_world_coords := false, dist := 1.0, flying := false) -> void:
+func highlight_area(pos : Vector2, tile_index : int, is_in_world_coords := false, dist := 1.0, flying := false, use_cardinals := consts.PATH_CARDINAL, use_diagonals := consts.PATH_INTERCARDINAL) -> void:
 	"""
-	Assumes the positions are already converted to map coordinates
+	highlights an expanding area around the given position, recursively
 	"""
 	if is_in_world_coords:
 		pos = world_to_map(pos)
-	if is_tile_traversable(pos):
+	if is_tile_traversable(pos) or flying:
 #		print("fart")
-		set_tile(MAP_TYPE.HIGHLIGHT, pos,tile_index)
+		if get_tile(MAP_TYPE.HIGHLIGHT, pos) == TileMap.INVALID_CELL:
+			set_tile(MAP_TYPE.HIGHLIGHT, pos,tile_index)
 	elif !flying:
 		return
 	#distances
-	if(consts.PATH_CARDINAL and dist > consts.CARDINAL_COST):
+	if(use_cardinals and dist > consts.CARDINAL_COST):
 		highlight_area(pos + dir.NORTH, tile_index, false, dist-consts.CARDINAL_COST, flying)
 		highlight_area(pos + dir.EAST, tile_index, false, dist-consts.CARDINAL_COST, flying)
 		highlight_area(pos + dir.SOUTH, tile_index, false, dist-consts.CARDINAL_COST, flying)
 		highlight_area(pos + dir.WEST, tile_index, false, dist-consts.CARDINAL_COST, flying)
-		if(consts.PATH_INTERCARDINAL and dist > consts.INTERCARDINAL_COST):
+	if(use_diagonals and dist > consts.INTERCARDINAL_COST):
+		if can_move_to_adjacent(pos, pos + dir.NORTH_EAST):
 			highlight_area(pos + dir.NORTH_EAST, tile_index, false, dist-consts.INTERCARDINAL_COST, flying)
+		if can_move_to_adjacent(pos, pos + dir.SOUTH_EAST):
 			highlight_area(pos + dir.SOUTH_EAST, tile_index, false, dist-consts.INTERCARDINAL_COST, flying)
+		if can_move_to_adjacent(pos, pos + dir.SOUTH_WEST):
 			highlight_area(pos + dir.SOUTH_WEST, tile_index, false, dist-consts.INTERCARDINAL_COST, flying)
+		if can_move_to_adjacent(pos, pos + dir.NORTH_WEST):
 			highlight_area(pos + dir.NORTH_WEST, tile_index, false, dist-consts.INTERCARDINAL_COST, flying)

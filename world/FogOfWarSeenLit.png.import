@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FogOfWar.png-d93ae8074ca1660b3ce19aee356e10ea.stex"
+path="res://.import/FogOfWarSeenLit.png-46aa99d170dc73793b34ef7c70587342.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FogOfWar.png"
-dest_files=[ "res://.import/FogOfWar.png-d93ae8074ca1660b3ce19aee356e10ea.stex" ]
+source_file="res://world/FogOfWarSeenLit.png"
+dest_files=[ "res://.import/FogOfWarSeenLit.png-46aa99d170dc73793b34ef7c70587342.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

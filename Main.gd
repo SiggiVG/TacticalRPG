@@ -15,7 +15,7 @@ func _ready() -> void:
 	dir.initialize()
 	dice.initialize()
 	iso.set_dungeon(get_node("Dungeon"))
-	get_node("TurnQueue").initialize()
+#	get_node("TurnQueue").initialize()
 	
 func change_dungeon(dungeon) -> void:
 	remove_child(get_node("Dungeon")) #todo: save to file
@@ -24,3 +24,6 @@ func change_dungeon(dungeon) -> void:
 
 func _on_TileMap_on_tile_clicked(mouse_button, world_pos : Vector2, tile_type : String):
 	emit_signal("on_tile_clicked",mouse_button, world_pos, tile_type)
+
+func _unhandled_input(event):
+	pass

@@ -63,27 +63,31 @@ func drop_item(hand):
 var action_status
 
 func _process(delta) -> void:
+
 	if is_active_character:
-#		print (get_actions().get_child(0))
-#		print (actions.get_child(0).action_status)
 		if !cur_action:
 			set_process(false)
 			action_status = null
 			return
 		if cur_action.action_status == Action.STATUS.FINISHED or cur_action.action_status == Action.STATUS.INTERRUPTED:
-			print (cur_action.name)
 			actions_remaining += action_status.resume()
 			action_status = null
+#			cur_action._reset()
+#			cur_action = null
 			set_process(false)
+			state = Entity.ENTITY_STATE.IDLE
 	else:
 		set_process(false)
 
 func _on_entity_selected():
-	if is_active_character:
+	if is_active_character and state == Entity.ENTITY_STATE.IDLE:
 		if actions_remaining > 0:
-			cur_action = actions.get_node("ActionStrike")
-			action_status = cur_action.perform_action(self, {"position" : position, "actions_remaining" : actions_remaining})
+			state = Entity.ENTITY_STATE.INPUT
+			cur_action = actions.get_node("ActionStride")
+			action_status = cur_action._perform_action(self, {"position" : position, "actions_remaining" : actions_remaining})
 			set_process(true)
 		else:
 			is_active_character = false
 			set_process(false)
+	else:
+		state = Entity.ENTITY_STATE.IDLE

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/iso_red.png-e959c029e7485afc64cec0f74e196f2e.stex"
+path="res://.import/FogOfWar.png-825b01d4fd367c3e1234e7642871a4cc.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://iso_red.png"
-dest_files=[ "res://.import/iso_red.png-e959c029e7485afc64cec0f74e196f2e.stex" ]
+source_file="res://world/FogOfWar.png"
+dest_files=[ "res://.import/FogOfWar.png-825b01d4fd367c3e1234e7642871a4cc.stex" ]
 
 [params]
 

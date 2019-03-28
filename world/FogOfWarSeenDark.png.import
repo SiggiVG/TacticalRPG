@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/FogOfWarSeenLit.png-5986ee0c69838d94c81d80a266da6f36.stex"
+path="res://.import/FogOfWarSeenDark.png-8922903bf4139a31d1b2460cdcdd7511.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FogOfWarSeenLit.png"
-dest_files=[ "res://.import/FogOfWarSeenLit.png-5986ee0c69838d94c81d80a266da6f36.stex" ]
+source_file="res://world/FogOfWarSeenDark.png"
+dest_files=[ "res://.import/FogOfWarSeenDark.png-8922903bf4139a31d1b2460cdcdd7511.stex" ]
 
 [params]
 

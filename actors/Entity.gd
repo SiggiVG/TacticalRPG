@@ -8,6 +8,13 @@ var has_used_reaction := false
 var cur_action : Action
 
 signal on_enter_cell
+signal on_exit_cell
+
+enum ENTITY_STATE {
+	IDLE,
+	INPUT
+}
+var state = ENTITY_STATE.IDLE
 
 func _ready():
 	set_process(false)
