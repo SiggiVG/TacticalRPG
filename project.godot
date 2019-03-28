@@ -12,112 +12,97 @@ _global_script_classes=[ {
 "base": "Node",
 "class": "Action",
 "language": "GDScript",
-"path": "res://actors/actions/Action.gd"
+"path": "res://scripts/actors/actions/Action.gd"
 }, {
 "base": "ActionStride",
 "class": "ActionStep",
 "language": "GDScript",
-"path": "res://actors/actions/basic/ActionStep.gd"
+"path": "res://scripts/actors/actions/basic/ActionStep.gd"
 }, {
 "base": "Action",
 "class": "ActionStride",
 "language": "GDScript",
-"path": "res://actors/actions/basic/ActionStride.gd"
+"path": "res://scripts/actors/actions/basic/ActionStride.gd"
 }, {
 "base": "Action",
 "class": "ActionStrike",
 "language": "GDScript",
-"path": "res://actors/actions/basic/ActionStrike.gd"
+"path": "res://scripts/actors/actions/basic/ActionStrike.gd"
 }, {
 "base": "Action",
 "class": "Activity",
 "language": "GDScript",
-"path": "res://actors/actions/Activity.gd"
+"path": "res://scripts/actors/actions/Activity.gd"
 }, {
 "base": "Node",
 "class": "AttackOfOpportunity",
 "language": "GDScript",
-"path": "res://actors/actions/ReactionAoO.gd"
+"path": "res://scripts/actors/actions/ReactionAoO.gd"
 }, {
 "base": "Node",
 "class": "DiceRoller",
 "language": "GDScript",
-"path": "res://util/DiceRoller.gd"
-}, {
-"base": "Node2D",
-"class": "Dungeon",
-"language": "GDScript",
-"path": "res://world/Dungeon.gd"
+"path": "res://scripts/util/DiceRoller.gd"
 }, {
 "base": "Node2D",
 "class": "DungeonMap",
 "language": "GDScript",
-"path": "res://world/DungeonMap.gd"
+"path": "res://scripts/world/DungeonMap.gd"
 }, {
 "base": "Node2D",
 "class": "DungeonZoom",
 "language": "GDScript",
-"path": "res://world/DungeonZoom.gd"
+"path": "res://scripts/world/DungeonZoom.gd"
 }, {
 "base": "Node2D",
 "class": "Entity",
 "language": "GDScript",
-"path": "res://actors/Entity.gd"
-}, {
-"base": "Node2D",
-"class": "EntityHumanoid",
-"language": "GDScript",
-"path": "res://actors/EntityHumanoid.gd"
+"path": "res://scripts/actors/Entity.gd"
 }, {
 "base": "Node",
 "class": "EntityList",
 "language": "GDScript",
-"path": "res://actors/EntityList.gd"
-}, {
-"base": "Node2D",
-"class": "EntityLiving",
-"language": "GDScript",
-"path": "res://actors/EntityLiving.gd"
+"path": "res://scripts/actors/EntityList.gd"
 }, {
 "base": "Node",
 "class": "Health",
 "language": "GDScript",
-"path": "res://actors/living/Health.gd"
+"path": "res://scripts/actors/living/Health.gd"
 }, {
 "base": "Node",
 "class": "Helper",
 "language": "GDScript",
-"path": "res://util/Helper.gd"
+"path": "res://scripts/util/Helper.gd"
 }, {
 "base": "Node",
 "class": "IsoGrid",
 "language": "GDScript",
-"path": "res://util/IsoGrid.gd"
+"path": "res://scripts/util/IsoGrid.gd"
 }, {
 "base": "Node",
 "class": "Maths",
 "language": "GDScript",
-"path": "res://util/Maths.gd"
+"path": "res://scripts/util/Maths.gd"
 }, {
 "base": "Node",
 "class": "Morale",
 "language": "GDScript",
-"path": "res://actors/living/Morale.gd"
+"path": "res://scripts/actors/living/Morale.gd"
 }, {
 "base": "Action",
 "class": "Reaction",
 "language": "GDScript",
-"path": "res://actors/actions/Reaction.gd"
+"path": "res://scripts/actors/actions/Reaction.gd"
 }, {
 "base": "Node",
 "class": "Traits",
 "language": "GDScript",
-"path": "res://actors/living/Traits.gd"
+"path": "res://scripts/actors/living/Traits.gd"
 }, {
 "base": "Control",
 "class": "TurnQueue",
 "language": "GDScript",
-"path": "res://ui/TurnQueue.gd"
+"path": "res://scripts/ui/TurnQueue.gd"
 } ]
 _global_script_class_icons={
 "Action": "",
@@ -127,13 +112,10 @@ _global_script_class_icons={
 "Activity": "",
 "AttackOfOpportunity": "",
 "DiceRoller": "",
-"Dungeon": "",
 "DungeonMap": "",
 "DungeonZoom": "",
 "Entity": "",
-"EntityHumanoid": "",
 "EntityList": "",
-"EntityLiving": "",
 "Health": "",
 "Helper": "",
 "IsoGrid": "",
@@ -147,18 +129,18 @@ _global_script_class_icons={
 [application]
 
 config/name="Tactical RPG"
-run/main_scene="res://Main.tscn"
-config/icon="res://icon.png"
+run/main_scene="res://scenes/Main.tscn"
+config/icon="res://sprites/Die_48x48.png"
 
 [autoload]
 
-consts="*res://util/GameConstants.gd"
-maths="*res://util/Maths.gd"
-helper="*res://util/Helper.gd"
-dir="*res://util/Direction.gd"
-dice="*res://util/DiceRoller.gd"
-iso="*res://util/IsoGrid.gd"
-res="*res://util/Resources.gd"
+consts="*res://scripts/util/GameConstants.gd"
+maths="*res://scripts/util/Maths.gd"
+helper="*res://scripts/util/Helper.gd"
+dir="*res://scripts/util/Direction.gd"
+dice="*res://scripts/util/DiceRoller.gd"
+iso="*res://scripts/util/IsoGrid.gd"
+res="*res://scripts/util/Resources.gd"
 
 [display]
 
@@ -183,4 +165,3 @@ zoom_out={
 [rendering]
 
 quality/2d/use_pixel_snap=true
-environment/default_environment="res://default_env.tres"
