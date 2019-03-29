@@ -48,6 +48,8 @@ func _process(delta) -> void:
 		STATUS.CHECK_VALID:
 			if _check_valid():
 				action_status = STATUS.DO_ACTION
+#			else:
+#				action_status = STATUS.INPUT
 		STATUS.DO_ACTION:
 			if _do_action():
 				action_status = STATUS.FINISHED

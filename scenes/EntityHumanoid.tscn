@@ -58,6 +58,8 @@ script = ExtResource( 7 )
 [node name="ActionStrike" type="Node" parent="Actions"]
 script = ExtResource( 8 )
 
+[node name="Line2D" type="Line2D" parent="Actions"]
+
 [connection signal="entity_clicked" from="EntityArea" to="." method="_on_EntityArea_entity_clicked"]
 [connection signal="mouse_exited" from="EntityArea" to="." method="_on_EntityArea_mouse_exited"]
 
